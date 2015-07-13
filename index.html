@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <title>Harvest Job</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/starter-template.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Harvest Job</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="starter-template">
+        <h1>Instructions</h1>
+        <p class="lead">Please follow the instructions below to complete this job.</p>
+        <pre style="text-align:left">
+            (1) Start your browser in incognito/guest mode.
+                - Need help with private browsing? See: <a href="https://support.google.com/chrome/answer/95464?hl=en">Chrome</a>, <a href="https://support.mozilla.org/en-US/kb/private-browsing-browse-web-without-saving-info#w_how-do-i-open-a-new-private-window">Firefox</a>, <a href="http://windows.microsoft.com/en-us/internet-explorer/products/ie-9/features/in-private">Internet Explorer</a>, <a href="http://support.apple.com/kb/PH11882">Safari</a>
+
+            (2) Go to <a href="https://accounts.google.com/SignUp">https://accounts.google.com/SignUp</a>.
+
+            (3) Fill out the requested information EXCEPT "Mobile phone" and "Current email address" as they are not necessary.
+
+            (4) Submit the first name, last name, email and password of the account you created below.
+
+            (5) Enter the returned validation code to claim task completion.
+        </pre>
+        <div id="result"><p class="lead"><i>Please avoid using any personal information!</i></p></div>
+
+        <script>
+            function submitForm(){
+                if ($('#first_name').val().length > 0) {
+                    if ($('#last_name').val().length > 0) {
+                        if ($('#username').val().length > 0) {
+                            if ($('#password').val().length > 0) {
+                                $('#result').html("<font color=\"red\"><h4>Processing.  Please wait...</h4></font>");
+                                var url = "/credentials.php?" 
+                                            + "username=" + $('#username').val() 
+                                            + "&first_name=" + $('#first_name').val() 
+                                            + "&last_name=" + $('#last_name').val()  
+                                            + "&password=" + $('#password').val();
+                                $.getJSON(url , function( data ) {
+                                  var success = data["success"];
+                                  if(success){
+                                      $('#result').html("<font color=\"green\"><h4>Success! Your validation code is: " + data["validation_code"] + "</h4></font>");
+                                      $('#submission_form').html("");
+                                  } else {
+                                      $('#result').html("<font color=\"red\"><h4>Sorry.  " + data["message"] + "</h4></font>");
+                                  }
+                                }).fail(function() {
+                                    alert("Error submitting credentials, please try again later.");
+                                });
+                            } else {
+                                alert("Password is missing!");
+                                return;
+                            }
+                        } else {
+                            alert("Username is missing!");
+                            return;
+                        }
+                    } else {
+                        alert("Last name is missing!");
+                        return;
+                    }
+                } else {
+                    alert("First name is missing!");
+                    return;
+                }
+            }
+        </script>
+
+        <div id="submission_form">
+        <h3>Job Submission Form</h3>
+        <label for="first_name">First Name:&nbsp;</label>
+        <input type="text" id="first_name" name="first_name" value=""><br />
+
+        <label for="last_name">Last Name:&nbsp;</label>
+        <input type="text" id="last_name" name="last_name" value=""><br />
+
+        <label for="username">Username:&nbsp;&nbsp;</label>
+        <input type="text" id="username" name="username" value=""><br />
+
+        <label for="password">Password:&nbsp;&nbsp;</label>
+        <input type="text" id="password" name="password" value=""><br />
+    
+        <br />
+        <input type="button" value="Submit" onclick="submitForm();">
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</body></html>
